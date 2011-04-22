@@ -1,0 +1,5 @@
+# URL health checker list
+#
+# example:
+# http://example.com	192.0.32.10
+# http://example.cz
