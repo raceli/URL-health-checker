@@ -95,7 +95,7 @@ for url in fh:
 		sys.stderr.write("Syntax error on line " + str(line) + "\n")
 		continue
 
-	result = test_url(m.group('url'), m.group('ip'), m.group('scheme'))
+	result = test_url(m.group('url'), m.group('ip'))
 
 	if(str(result[0]) != '200'):
 		print str(result[0]) + "\t" + result[1]
