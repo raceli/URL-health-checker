@@ -65,8 +65,8 @@ def test_url(url, ip = None, prev_url = None):
 			return ('30x', prev_url if prev_url != None else url, ip)
 	except urllib2.HTTPError, e:
 		return (e.getcode(), prev_url if prev_url != None else url, ip)
-	except:
-		return ('???', prev_url if prev_url != None else url, ip)
+
+	return ('???', prev_url if prev_url != None else url, ip)
 
 if len(sys.argv) != 2:
 	sys.stderr.write("Usage: " + sys.argv[0] + " file\n")
@@ -83,20 +83,24 @@ comment = re.compile(r'^#.*')
 whitespace = re.compile(r'\s+')
 urlip = re.compile('^(?P<url>https?://.+?)\t?(?P<ip>[\d\.]+)*$')
 line = 0
-for url in fh:
-	line += 1
+try:
+	for url in fh:
+		line += 1
 
-	# skip comments and empty lines
-	if comment.match(url) or whitespace.match(url):
-		continue
+		# skip comments and empty lines
+		if comment.match(url) or whitespace.match(url):
+			continue
 
-	m = urlip.match(url)
-	if not m:
-		sys.stderr.write("Syntax error on line " + str(line) + "\n")
-		continue
+		m = urlip.match(url)
+		if not m:
+			sys.stderr.write("Syntax error on line " + str(line) + "\n")
+			continue
 
-	result = test_url(m.group('url'), m.group('ip'))
+		result = test_url(m.group('url'), m.group('ip'))
 
-	if(str(result[0]) != '200'):
-		print str(result[0]) + "\t" + result[1]
+		if(str(result[0]) != '200'):
+			print str(result[0]) + "\t" + result[1]
+except KeyboardInterrupt:
+	sys.stderr.write('Terminated\n')
+	sys.exit(1)
 
